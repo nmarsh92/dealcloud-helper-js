@@ -8,6 +8,10 @@ module.exports = async (dcConnector, dcClient, schemaPath, classPath) => {
     fs.mkdirSync(schemaPath);
   }
 
+  if (!fs.existsSync(classPath)) {
+    fs.mkdirSync(classPath);
+  }
+
   if (schemaPath[schemaPath.length - 1] !== "/") {
     schemaPath += '/'
   }

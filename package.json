@@ -1,6 +1,6 @@
 {
   "name": "dealcloud-helper-js",
-  "version": "1.0.2",
+  "version": "1.0.9",
   "description": "DealCloud helper functions to allow ease of use with the dc-connector and DealCloud SOAP Api. These functions require the dc connector as a parameter.",
   "main": "index.js",
   "scripts": {

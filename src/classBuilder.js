@@ -2,7 +2,7 @@ const utils = require("./utils");
 
 module.exports = schema => {
   let classString = "";
-  classString += "const getDCValue = require('../src/modules/getDCValue');";
+  classString += "const getDCValue = require('dealcloud-helper-js').getDCValue;";
   classString += "const _ = require('lodash');";
   classString += "\nclass " + utils.removeSpecialCharacters(schema.list) + "{ ";
   classString += "\nstatic entryListId=" + schema.entryListId + ";";
