@@ -6,7 +6,8 @@ module.exports = function(dcObjects) {
         dcObject.entryId &&
         (dcObject[key].value ||
           dcObject[key].value === false ||
-          dcObject[key].value === 0)
+          dcObject[key].value === 0 || 
+          dcObject[key].allowNull === true)
       ) {
         let dcPush = {
           EntryId: dcObject.entryId,

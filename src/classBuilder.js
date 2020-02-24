@@ -20,6 +20,8 @@ module.exports = schema => {
       "getDCValue(this." +
       field.jsonProperty +
       ", values);";
+      "\nthis." +
+      field.jsonProperty + '.allowNull = false;'
   });
   classString += "\n}";
   classString += "\n}";

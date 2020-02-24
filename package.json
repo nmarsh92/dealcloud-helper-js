@@ -1,6 +1,6 @@
 {
   "name": "dealcloud-helper-js",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "DealCloud helper functions to allow ease of use with the dc-connector and DealCloud SOAP Api. These functions require the dc connector as a parameter.",
   "main": "index.js",
   "scripts": {
@@ -14,5 +14,6 @@
     "moment": "^2.24.0",
     "soap": "^0.30.0",
     "strong-soap": "^1.21.0"
-  }
+  },
+  "keywords": ["dealcloud", "oneplace", "intapp"]
 }
