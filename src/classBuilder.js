@@ -18,16 +18,16 @@ module.exports = schema => {
   classString += "\nthis.entryListId=" + schema.entryListId + ";";
   classString += "\nthis.entryId = entryId;";
   classString +=
-    "//typically you would only want to use one or neither of these. ";
+    "//typically you would only want to use one or neither of these. \n";
   classString +=
     "//This is an alternative way to send/pull values without removing the properties";
-  classString += "//default is all";
-  classString += "this.includeKeys = [];";
-  classString += "//default is none";
-  classString += "this.excludeKeys = [];";
+  classString += "//default is all\n";
+  classString += "this.includeKeys = [];\n";
+  classString += "//default is none\n";
+  classString += "this.excludeKeys = [];\n";
   classString +=
-    "//this will allow null for all values on this object, it's not recommended unless you want every null/blank value to be sent.";
-  classString += "this.allowNull = false;";
+    "//this will allow null for all values on this object, it's not recommended unless you want every null/blank value to be sent.\n";
+  classString += "this.allowNull = false;\n";
   schema.fields.forEach(field => {
     classString += "\nthis." + field.jsonProperty + "=" + JSON.stringify(field);
     classString +=
