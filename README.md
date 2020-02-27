@@ -1,5 +1,10 @@
 # dealcloud-helper-js
 
+## Dependency
+
+Currently all functions in dealcloud-helper-js use
+[dealcloud-js](https://www.npmjs.com/package/dealcloud-js)
+
 ## Install
 
 `npm install dealcloud-helper-js`
@@ -10,7 +15,7 @@
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 
 let client = await dcHelper.createClientAsync({
   username: "<username>",
@@ -23,14 +28,14 @@ let client = await dcHelper.createClientAsync({
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 let client = await dcHelper.createClientAsync({
   username: "<username>",
   password: "<password>",
   url: "<url-to-dc-site>"
 });
 await dcHelper.buildReferenceFilesAsync(
-  dcConnector,
+  dealcloud,
   client,
   "./src/schemas/",
   "./src/models/"
@@ -41,7 +46,7 @@ await dcHelper.buildReferenceFilesAsync(
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 //from the reference files we generated
 const Country = require("./src/models/Country");
 let client = await dcHelper.createClientAsync({
@@ -50,8 +55,8 @@ let client = await dcHelper.createClientAsync({
   url: "<url-to-dc-site>"
 });
 
-let fields = await dcConnector.getFieldsAsync(client);
-let lists = await dcConnector.getListsAsync(client);
+let fields = await dealcloud.getFieldsAsync(client);
+let lists = await dealcloud.getListsAsync(client);
 let items = await dcHelper.getItemsAsync(client, Country, fields);
 //items = [{Country}, {Country}, {Country}, {Country}];
 ```
@@ -60,7 +65,7 @@ let items = await dcHelper.getItemsAsync(client, Country, fields);
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 //from the reference files we generated
 const Country = require("./src/models/Country");
 let client = await dcHelper.createClientAsync({
@@ -69,8 +74,8 @@ let client = await dcHelper.createClientAsync({
   url: "<url-to-dc-site>"
 });
 
-let fields = await dcConnector.getFieldsAsync(client);
-let lists = await dcConnector.getListsAsync(client);
+let fields = await dealcloud.getFieldsAsync(client);
+let lists = await dealcloud.getListsAsync(client);
 let items = await dcHelper.getItemsAsync(client, Country, fields);
 let myCountries = items.filter((country) => {
     return (country.country.value && country.country.value.toLowerCase().includes('united'));
@@ -81,7 +86,7 @@ myCountries.forEach((country, index)=> {
 });
 
 let results = await dcHelper.processDCPushAsync(
-  dcConnector,
+  dealcloud,
   client,
   myCountries,
   Country.entryListId
@@ -92,7 +97,7 @@ let results = await dcHelper.processDCPushAsync(
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 //from the reference files we generated
 const Country = require("./src/models/Country");
 let client = await dcHelper.createClientAsync({
@@ -104,7 +109,7 @@ let entryId = -1;
 let countries = [new Country([], entryId--)];
 countries[0].country.value = "Mars";
 let results = await dcHelper.processDCPushAsync(
-  dcConnector,
+  dealcloud,
   client,
   countries,
   Country.entryListId
@@ -115,7 +120,7 @@ let results = await dcHelper.processDCPushAsync(
 
 ```javascript
 const dcHelper = require("dealcloud-helper-js");
-const dcConnector = require("dealcloud-js");
+const dealcloud = require("dealcloud-js");
 //from the reference files we generated
 const Country = require("./src/models/Country");
 let client = await dcHelper.createClientAsync({
@@ -123,14 +128,17 @@ let client = await dcHelper.createClientAsync({
   password: "<password>",
   url: "<url-to-dc-site>"
 });
-let entryId = -1;
-let countries = [new Country([], entryId--)];
-countries[0].country.value = '';
-countries[0].allowNull = true;
+let fields = await dealcloud.getFieldsAsync(client);
+let lists = await dealcloud.getListsAsync(client);
+let items = await dcHelper.getItemsAsync(client, Country, fields);
+items[0].country.value = '';
+//this flag allows us to send null/empty/undefined for fields. Otherwise fields with null/undefined/empty value will not be sent.
+items[0].country.allowNull = true; 
 let results = await dcHelper.processDCPushAsync(
-  dcConnector,
+  dealcloud,
   client,
-  countries,
+  //only sending the one we modified, it accepts an array
+  [items[0]], 
   Country.entryListId
 );
 ```
@@ -138,4 +146,12 @@ let results = await dcHelper.processDCPushAsync(
 #### Delete Item  
 ```javascript
   Coming Soon
+```
+
+### Additional Properties
+```javascript
+object.allowNull: "Allows any null value to be sent in a DCPush";
+object.property.allowNull: "Allows null value to be sent in DCPush for this property only";
+object.includeKeys: "When set, add jsonProperty names that you want to allow to be sent. Useful if you only want to send the changes or you don't want to delete properties from the model";
+object.excludeKeys: "Will send everything except these keys.";
 ```
