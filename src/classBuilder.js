@@ -9,7 +9,7 @@ module.exports = schema => {
   classString += "\nstatic entryListId=" + schema.entryListId + ";";
   classString +=
     "\nstatic getFieldIds() { let tempObj = new " +
-    schema.list +
+    utils.removeSpecialCharacters(schema.list) +
     "([]);  return _.without(Object.values(tempObj).filter(field => ";
   classString +=
     "{return (field.Id && (tempObj.includeKeys.length === 0 || tempObj.includeKeys.includes(field.jsonProperty)) && !tempObj.excludeKeys.includes(field.jsonProperty)) })";

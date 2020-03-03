@@ -6,7 +6,8 @@ module.exports = {
   loadSchemasAsync: require('./src/loadSchemasAsync'),
   processDCPushAsync: require('./src/processDCPushAsync'),
   processDCPullAsync: require('./src/processDCPullAsync'),
-  getDCValue: require('./src/getDCValue')
+  getDCValue: require('./src/getDCValue'),
+  getNewEntryId: require('./src/getNewEntryId')
 }
 
 
