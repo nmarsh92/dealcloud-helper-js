@@ -18,7 +18,7 @@ module.exports = function(dcObjects) {
       let allowValue = hasValue || allowNull;
       if (
         dcObject.entryId &&
-        dcObject[key].Id &&
+        dcObject[key].id &&
         !dcObject[key].isCalculated &&
         include &&
         dontExclude &&
