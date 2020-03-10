@@ -1,7 +1,7 @@
 const fs = require("fs");
 const getDCPropName = require("./getDCPropName");
 const classBuilder = require("./classBuilder");
-module.exports = async (dcConnector, dcClient, schemaPath, classPath) => {
+module.exports = async (dcConnector, dcClient, schemaPath, classPath, excludeCalculated = true) => {
   let schema = await dcConnector.getSchema(dcClient);
 
   if (!fs.existsSync(schemaPath)) {
@@ -26,6 +26,6 @@ module.exports = async (dcConnector, dcClient, schemaPath, classPath) => {
       field.jsonProperty = getDCPropName(field.Name, field.FieldType);
     });
     fs.writeFileSync(schemaPath + fileName + ".json", JSON.stringify(sch));
-    fs.writeFileSync(classPath + fileName + ".js", classBuilder(sch));
+    fs.writeFileSync(classPath + fileName + ".js", classBuilder(sch, excludeCalculated));
   });
 };

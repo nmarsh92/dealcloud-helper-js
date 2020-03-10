@@ -19,14 +19,14 @@ module.exports = function(dcObjects) {
       if (
         dcObject.entryId &&
         dcObject[key].Id &&
-        !dcObject[key].IsCalculated &&
+        !dcObject[key].isCalculated &&
         include &&
         dontExclude &&
         allowValue
       ) {
         let dcPush = {
           EntryId: dcObject.entryId,
-          FieldId: dcObject[key].Id
+          FieldId: dcObject[key].id
         };
 
         if (moment.isMoment(dcObject[key].value)) {

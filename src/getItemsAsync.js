@@ -11,10 +11,7 @@ module.exports = async (dcConnector, dcClient, dcClass, allFields) => {
   });
   let entryIds = entries.NamedEntry.map(entry => entry["Id"]);
   let pullRequests = await buildPullRequestsAsync(entryIds, fieldIds);
-  let results = await processDCPullAsync({
-    dcClient: dcClient,
-    dcPulls: pullRequests
-  });
+  let results = await processDCPullAsync(dcConnector, dcClient, pullRequests);
   let grouped = myUtils.groupBy(results, "EntryId");
   let instances = [];
   for (let key in grouped) {

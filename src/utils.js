@@ -7,6 +7,25 @@ utils.camelize = str => {
     .replace(/\s+/g, "");
 };
 
+utils.recursiveCamelize = obj => {
+  let camelizedObj = {};
+  if (obj) {
+    for (let key in obj) {
+      if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+        camelizedObj[utils.camelize(key)] = utils.recursiveCamelize(obj[key]);
+      } else if (Array.isArray(obj[key])) {
+        camelizedObj[utils.camelize(key)] = [];
+        obj[key].forEach(el => {
+          camelizedObj[utils.camelize(key)].push(utils.recursiveCamelize(el));
+        });
+      } else {
+        camelizedObj[utils.camelize(key)] = obj[key];
+      }
+    }
+  }
+  return camelizedObj;
+};
+
 utils.removeWhitespace = str => {
   return str ? str.replace(/\s+/g, "") : str;
 };
