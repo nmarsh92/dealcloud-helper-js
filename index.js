@@ -8,7 +8,8 @@ module.exports = {
   processDCPushAsync: require('./src/processDCPushAsync'),
   processDCPullAsync: require('./src/processDCPullAsync'),
   getDCValue: require('./src/getDCValue'),
-  getNewEntryId: require('./src/getNewEntryId')
+  getNewEntryId: require('./src/getNewEntryId'),
+  getChoiceByName: require('./src/getChoiceByName')
 }
 
 
