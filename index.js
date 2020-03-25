@@ -9,7 +9,11 @@ module.exports = {
   processDCPullAsync: require('./src/processDCPullAsync'),
   getDCValue: require('./src/getDCValue'),
   //getNewEntryId: require('./src/getNewEntryId'),
-  getChoiceByName: require('./src/getChoiceByName')
+  getChoiceByName: require('./src/getChoiceByName'),
+  setValue: require('./src/setValue'),
+  instantiate: require('./src/instantiate'),
+  isChoiceSelected: require('./src/isChoiceSelected'),
+  utils: require('./src/utils')
 }
 
 

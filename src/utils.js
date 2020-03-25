@@ -54,4 +54,24 @@ utils.asyncForEach = (arr, cb) => {
   );
 };
 
+utils.groupByModelValue = (array, key) => {
+  // Return the end result
+  return array.reduce((result, currentValue) => {
+    // If an array already present for key, push it to the array. Else create an array and push the object
+    (result[currentValue[key].value] =
+      result[currentValue[key].value] || []).push(currentValue);
+    // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+    return result;
+  }, {}); // empty object is the initial value for result object
+};
+utils.setValue = (obj, key, value) => {
+  if (value !== null && obj[key] !== value) {
+    obj.includeKeys.push(key);
+    obj[key].value = value;
+  }
+};
+utils.timeout = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 module.exports = utils;

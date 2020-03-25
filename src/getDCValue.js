@@ -1,7 +1,7 @@
-const moment = require('moment');
+const moment = require("moment");
 module.exports = (fieldId, fieldType, values) => {
   let value = values.filter(val => {
-    return (val.FieldId === fieldId);
+    return val.FieldId === fieldId;
   });
   let propValue = null;
 
@@ -9,9 +9,9 @@ module.exports = (fieldId, fieldType, values) => {
     value = value[0].Value;
     switch (fieldType) {
       case "Text":
-      case "Choice":
         propValue = value.Name || value.$value;
         break;
+      case "Choice":
       case "Reference":
       case "User":
         propValue = {
@@ -29,8 +29,7 @@ module.exports = (fieldId, fieldType, values) => {
         propValue = parseInt(value.$value);
         break;
       case "Boolean":
-        propValue =
-        value.$value && value.$value.toLowerCase() === "true";
+        propValue = value.$value && value.$value.toLowerCase() === "true";
         break;
     }
   }

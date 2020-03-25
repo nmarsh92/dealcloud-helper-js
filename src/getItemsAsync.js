@@ -1,7 +1,7 @@
 const buildPullRequestsAsync = require("./buildPullRequestsAsync");
 const processDCPullAsync = require("./processDCPullAsync");
 const validateFields = require("./validateFields");
-const myUtils = require("./utils");
+const instantiate = require('./instantiate');
 module.exports = async (dcConnector, dcClient, dcClass, allFields) => {
   let fieldIds = dcClass.getFieldIds();
   validateFields(dcClass.entryListId, allFields, fieldIds);
@@ -9,13 +9,13 @@ module.exports = async (dcConnector, dcClient, dcClass, allFields) => {
     client: dcClient,
     entryListId: dcClass.entryListId
   });
-  let entryIds = entries.NamedEntry.map(entry => entry["Id"]);
-  let pullRequests = await buildPullRequestsAsync(entryIds, fieldIds);
-  let results = await processDCPullAsync(dcConnector, dcClient, pullRequests);
-  let grouped = myUtils.groupBy(results, "EntryId");
-  let instances = [];
-  for (let key in grouped) {
-    instances.push(new dcClass(grouped[key], key));
+  if(entries){
+    let entryIds = entries.NamedEntry.map(entry => entry["Id"]);
+    let pullRequests = await buildPullRequestsAsync(entryIds, fieldIds);
+    let results = await processDCPullAsync(dcConnector, dcClient, pullRequests);
+    return instantiate(results, dcClass);
+  } else {
+    return [];
   }
-  return instances;
+  
 };

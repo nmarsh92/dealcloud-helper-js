@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 module.exports = function(dcObjects) {
   let dcPushes = [];
   dcObjects.forEach(dcObject => {
@@ -28,7 +30,7 @@ module.exports = function(dcObjects) {
           EntryId: dcObject.entryId,
           FieldId: dcObject[key].id
         };
-
+        let type = "string";
         if (moment.isMoment(dcObject[key].value)) {
           dcPush.Value = dcObject[key].value.toISOString();
         } else if (typeof dcObject[key].value === "object") {
@@ -36,6 +38,32 @@ module.exports = function(dcObjects) {
         } else {
           dcPush.Value = dcObject[key].value;
         }
+
+        switch (dcObject[key].fieldType) {
+          case "Text":
+          case "Boolean":
+          case "Choice":
+          case "Reference":
+          case "User":
+            break;
+          case "Date":
+            type = 'dateTime';
+            break;
+          case "Number":
+            type = 'decimal';
+            break;
+          case "Counter":
+            type = 'integer';
+
+        }
+
+        //xml converter needs this?
+        dcPush.Value = {
+          $attributes: {
+            $xsiType: `{http://www.w3.org/2001/XMLSchema}xsd:${type}`
+          },
+          $value: dcPush.Value
+        };
 
         dcPushes.push(dcPush);
       }

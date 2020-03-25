@@ -5,7 +5,7 @@ module.exports = function(choiceValues, name) {
   }
 
   let choice = choices.find(choice => {
-    return choice.name && name && choice.name.toLowerCase() === name.toLowerCase();
+    return choice.name && name && choice.name.toLowerCase() === name.toString().toLowerCase();
   });
 
   if(choice){

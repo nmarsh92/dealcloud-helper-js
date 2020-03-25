@@ -1,4 +1,6 @@
 const getDCPushRequests = require("./getDCPushRequests");
+const getBatchedRequests = require("./getBatchedRequests");
+const utils = require("./utils");
 module.exports = async function(
   dcConnector,
   dcClient,
@@ -8,15 +10,27 @@ module.exports = async function(
 ) {
   let dcPushes = getDCPushRequests(dcObjects);
   let batchedRequests = getBatchedRequests(dcPushes, batchSize);
-  let results = [];
-  await myUtils.asyncForEach(batchedRequests, async request => {
+  let result = {
+    results: [],
+    errors: []
+  };
+  await utils.asyncForEach(batchedRequests, async request => {
     let temp = await dcConnector.processDCPushAsync({
       client: dcClient,
       entryListId: entryListId,
-      DCPulls: request
+      DCPushs: request
     });
-    results = results.concat(temp);
+
+    if (temp.ProcessDCPushResult && temp.ProcessDCPushResult.DCResult){
+      result.results = result.results.concat(temp.ProcessDCPushResult.DCResult.filter(dcr => {
+        return !dcr.Error;
+      }));
+      result.errors = result.errors.concat(temp.ProcessDCPushResult.DCResult.filter(dcr => {
+        return dcr.Error;
+      }));
+    }
+      
   });
 
-  return results;
+  return result;
 };
