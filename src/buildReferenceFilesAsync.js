@@ -1,8 +1,8 @@
 const fs = require("fs");
 const getDCPropName = require("./getDCPropName");
 const classBuilder = require("./classBuilder");
-module.exports = async (dcConnector, dcClient, schemaPath, classPath, excludeCalculated = true) => {
-  let schema = await dcConnector.getSchema(dcClient);
+module.exports = async (dealcloud, dcClient, schemaPath, classPath, excludeCalculated = true) => {
+  let schema = await dealcloud.getSchema(dcClient);
 
   if (!fs.existsSync(schemaPath)) {
     fs.mkdirSync(schemaPath);

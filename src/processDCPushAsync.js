@@ -2,7 +2,7 @@ const getDCPushRequests = require("./getDCPushRequests");
 const getBatchedRequests = require("./getBatchedRequests");
 const utils = require("./utils");
 module.exports = async function(
-  dcConnector,
+  dealcloud,
   dcClient,
   dcObjects,
   entryListId,
@@ -15,7 +15,7 @@ module.exports = async function(
     errors: []
   };
   await utils.asyncForEach(batchedRequests, async request => {
-    let temp = await dcConnector.processDCPushAsync({
+    let temp = await dealcloud.processDCPushAsync({
       client: dcClient,
       entryListId: entryListId,
       DCPushs: request
