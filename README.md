@@ -152,6 +152,7 @@ let results = await dcHelper.processDCPushAsync(
 ```javascript
 object.allowNull: "Allows any null value to be sent in a DCPush";
 object.property.allowNull: "Allows null value to be sent in DCPush for this property only";
-object.includeKeys: "When set, add jsonProperty names that you want to allow to be sent. Useful if you only want to send the changes or you don't want to delete properties from the model";
-object.excludeKeys: "Will send everything except these keys.";
+object.includeKeys: "When set, add jsonProperty names that you want to allow to be returned.";
+object.keysToSave: "Will only save these keys.";
+object.excludeKeys: "Will get everything except these keys.";
 ```

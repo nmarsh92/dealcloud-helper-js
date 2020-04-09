@@ -1,16 +1,15 @@
 const moment = require("moment");
 
-module.exports = function(dcObjects) {
+module.exports = function (dcObjects) {
   let dcPushes = [];
   dcObjects.forEach(dcObject => {
+    if (!dcObject.keysToSave) {
+      dcObject.keysToSave = [];
+    }
+
     for (let key in dcObject) {
       let include =
-        dcObject.includeKeys.length === 0 ||
-        dcObject.includeKeys.includes(key) ||
-        key === "entryId";
-      let dontExclude =
-        dcObject.excludeKeys.length === 0 ||
-        !dcObject.excludeKeys.includes(key) ||
+        dcObject.keysToSave.includes(key) ||
         key === "entryId";
       let hasValue =
         dcObject[key].value ||
@@ -23,7 +22,6 @@ module.exports = function(dcObjects) {
         dcObject[key].id &&
         !dcObject[key].isCalculated &&
         include &&
-        dontExclude &&
         allowValue
       ) {
         let dcPush = {
@@ -31,10 +29,20 @@ module.exports = function(dcObjects) {
           FieldId: dcObject[key].id
         };
         let type = "string";
+        let namespace = 'http://www.w3.org/2001/XMLSchema';
         if (moment.isMoment(dcObject[key].value)) {
           dcPush.Value = dcObject[key].value.toISOString();
-        } else if (typeof dcObject[key].value === "object") {
+        } else if (!Array.isArray(dcObject[key].value) && typeof dcObject[key].value === "object") {
           dcPush.Value = dcObject[key].value.id;
+        } else if (Array.isArray(dcObject[key].value)) {
+          dcPush.Value = dcObject[key].value.map(item => {
+            return typeof item === 'object' ? item.id : item
+          }).join(',');
+
+          if (dcPush.Value.length === 0) {
+            dcPush.Value = null;
+          }
+
         } else {
           dcPush.Value = dcObject[key].value;
         }
@@ -42,9 +50,15 @@ module.exports = function(dcObjects) {
         switch (dcObject[key].fieldType) {
           case "Text":
           case "Boolean":
+            break;
           case "Choice":
           case "Reference":
           case "User":
+            type = "string";
+            // if (Array.isArray(dcPush.Value)) {
+            //   type = "ListOfInts";
+            //   namespace = 'https://schemas.dealcloud.com/dcdataservice/v2';
+            // }
             break;
           case "Date":
             type = 'dateTime';
@@ -60,7 +74,7 @@ module.exports = function(dcObjects) {
         //xml converter needs this?
         dcPush.Value = {
           $attributes: {
-            $xsiType: `{http://www.w3.org/2001/XMLSchema}xsd:${type}`
+            $xsiType: `{${namespace}}xsd:${type}`
           },
           $value: dcPush.Value
         };

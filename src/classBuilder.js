@@ -23,6 +23,7 @@ module.exports = (schema, excludeCalculated) => {
     "//This is an alternative way to send/pull values without removing the properties";
   classString += "//default is all\n";
   classString += "this.includeKeys = [];\n";
+  classString += "this.keysToSave = [];\n";
   classString += "//default is none\n";
   classString += "this.excludeKeys = [];\n";
   classString +=
@@ -44,7 +45,9 @@ module.exports = (schema, excludeCalculated) => {
         ",'" +
         field.FieldType +
         "'," +
-        "values)}";
+        "values, " +
+        (field.IsMultiSelect || false) +
+        ")}";
     }
   });
   classString += "\n}";

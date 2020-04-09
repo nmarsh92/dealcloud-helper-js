@@ -1,7 +1,7 @@
 const getDCPushRequests = require("./getDCPushRequests");
 const getBatchedRequests = require("./getBatchedRequests");
 const utils = require("./utils");
-module.exports = async function(
+module.exports = async function (
   dealcloud,
   dcClient,
   dcObjects,
@@ -21,7 +21,7 @@ module.exports = async function(
       DCPushs: request
     });
 
-    if (temp.ProcessDCPushResult && temp.ProcessDCPushResult.DCResult){
+    if (temp.ProcessDCPushResult && temp.ProcessDCPushResult.DCResult && Array.isArray(temp.ProcessDCPushResult.DCResult)) {
       result.results = result.results.concat(temp.ProcessDCPushResult.DCResult.filter(dcr => {
         return !dcr.Error;
       }));
@@ -29,7 +29,7 @@ module.exports = async function(
         return dcr.Error;
       }));
     }
-      
+
   });
 
   return result;
