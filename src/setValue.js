@@ -48,6 +48,11 @@ module.exports = (obj, key, value) => {
           }
         }
 
+        if (value === null) {
+          obj[key].value = null;
+          obj.keysToSave.push(key);
+        }
+
         break;
       case "Date":
         if (!obj[key].value || !moment(obj[key].value).isSame(value)) {

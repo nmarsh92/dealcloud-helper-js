@@ -1,7 +1,8 @@
+let _ = require('lodash');
 let utils = {};
 utils.camelize = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
       return index == 0 ? word.toLowerCase() : word.toUpperCase();
     })
     .replace(/\s+/g, "");
@@ -53,6 +54,21 @@ utils.asyncForEach = (arr, cb) => {
     })
   );
 };
+
+utils.limitedAsyncForEach = async (arr, cb, limitNum = 4) => {
+  var limited = [];
+  var source = _.cloneDeep(arr);
+  while (source.length > 0) {
+    for (var i = 0; i < limitNum; i++) {
+      if (source.length > 0) {
+        limited.push(source.pop());
+      }
+    }
+    await utils.asyncForEach(limited, cb);
+    limited.splice(0);
+  }
+
+}
 
 utils.groupByModelValue = (array, key) => {
   // Return the end result
