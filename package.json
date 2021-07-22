@@ -14,7 +14,7 @@
     "moment": "^2.24.0",
     "soap": "^0.30.0",
     "strong-soap": "^1.21.0",
-    "xlsx": "^0.15.5"
+    "xlsx": "^0.17.0"
   },
   "keywords": [
     "dealcloud",
